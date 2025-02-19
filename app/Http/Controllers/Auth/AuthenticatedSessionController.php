@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::attempt(['numero_documento' => $credentials['numero_documento'], 'password' => $credentials['password']], $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->route('pacientes.index'); // Redirigir a la lista de pacientes
         }
 
         return back()->withErrors([

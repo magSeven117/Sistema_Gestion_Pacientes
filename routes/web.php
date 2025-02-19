@@ -6,7 +6,7 @@ use App\Http\Controllers\MunicipioController; // ⚠️ Agregar esta línea
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('pacientes.index'); // Redirigir a la lista de pacientes
 });
 
 Route::get('/dashboard', function () {
@@ -23,6 +23,15 @@ Route::middleware('auth')->group(function () {
 
     // Ruta para obtener municipios por departamento
     Route::get('/municipios/{departamento_id}', [MunicipioController::class, 'getByDepartamento'])->name('municipios.get');
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/dashboard', function () {
+            return redirect()->route('pacientes.index'); // Redirigir después de iniciar sesión
+        })->name('dashboard');
+    
+        Route::resource('pacientes', PacienteController::class);
+    });
+
 });
 
 require __DIR__.'/auth.php';
